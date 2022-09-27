@@ -14,7 +14,7 @@ public class Harcos {
         this.nev = nev;
         this.szint = 1;
         this.tapasztalat = 0;
-        switch (statuszSablon){
+        switch (statuszSablon) {
             case 1:
                 this.alapEletero = 15;
                 this.alapSebzes = 3;
@@ -44,7 +44,11 @@ public class Harcos {
     }
 
     public void setSzint(int szint) {
-        this.szint = szint;
+        if (szint == this.szint++ && this.getSzintLepeshez() <= this.tapasztalat) {
+            this.szint = szint;
+            this.setTapasztalat(this.tapasztalat-this.getSzintLepeshez());
+            this.setEletero(this.getMaxEletero());
+        }
     }
 
     public int getTapasztalat() {
@@ -60,6 +64,12 @@ public class Harcos {
     }
 
     public void setEletero(int eletero) {
+        if (this.eletero == 0){
+            this.tapasztalat = 0;
+        }
+        if (this.eletero > this.getMaxEletero()){
+            this.eletero = this.getMaxEletero();
+        }
         this.eletero = eletero;
     }
 
@@ -75,26 +85,42 @@ public class Harcos {
     public int getSebzes() {
         return this.alapSebzes + this.szint;
     }
+
     public int getSzintLepeshez() {
-        return 10 + this.szint*5;
+        return 10 + this.szint * 5;
     }
+
     public int getMaxEletero() {
-        return this.alapEletero+this.szint*3;
+        return this.alapEletero + this.szint * 3;
     }
 
     public void megkuzd(Harcos masikHarcos) {
-        if (!Objects.equals(this.nev, masikHarcos.nev) && this.eletero !=0 && masikHarcos.eletero !=0){
-            masikHarcos.eletero = masikHarcos.eletero-this.getSebzes();
-            if (masikHarcos.eletero > 0){
-
+        if (!Objects.equals(this.nev, masikHarcos.nev) && this.eletero != 0 && masikHarcos.eletero != 0) {
+            masikHarcos.setEletero(masikHarcos.eletero - this.getSebzes());
+            if (masikHarcos.eletero > 0) {
+                masikHarcos.setTapasztalat(masikHarcos.tapasztalat + 5);
+                this.setEletero(this.eletero - masikHarcos.getSebzes());
+                if (this.eletero > 0) {
+                    this.setTapasztalat(this.tapasztalat + 5);
+                } else {
+                    masikHarcos.setTapasztalat(masikHarcos.tapasztalat + 10);
+                    this.setEletero(0);
+                }
+            } else {
+                this.setTapasztalat(this.tapasztalat + 15);
+                masikHarcos.setEletero(0);
             }
-        }else {
+        } else {
             System.err.println("Hiba!");
         }
     }
 
-    public void gyogyul(){
-
+    public void gyogyul() {
+        if (this.eletero == 0) {
+            this.setEletero(this.getMaxEletero());
+        } else {
+            this.setEletero(this.eletero + (3 + this.szint));
+        }
     }
 
     @Override
