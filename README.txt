@@ -1,0 +1,2 @@
+Nem vettem észre, de valamelyik petrikes diák globális nevet és e-mailt állított be az iskolás gépen. A 09.28-ai Frontend és Backend dolgozatnál vettem csak észre.
+Elnézést, hogy a commitok nem az én nevemen vannak.
